@@ -1,6 +1,13 @@
+[bot]
+token = "your_bot_token"
+prefix = "?"
+
+[owner]
+id = "your_discord_id"
+
+[directory]
+sherlock_script = "path/to/script"
+
 [markdown]
 yaml = "yaml"
 c = "c"
-
-[token]
-discord = "your_bot_token"
