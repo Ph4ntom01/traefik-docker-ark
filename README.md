@@ -48,7 +48,11 @@ You must configure the same file structure as below :
 
 ## Bot setup
 
-Define Sherlock as a system service.
+Define Sherlock as a system service, but first of all, make `sherlock.jar` executable :
+
+```sh
+sudo chmod +x ~/traefik-docker-ark/sherlock/sherlock.jar
+```
 
 ### Sherlock service script (sherlock-service.sh)
 
@@ -58,6 +62,7 @@ Create a script in `/usr/local/bin/` that will be able to start and stop the ser
 #!/bin/sh
 SERVICE_NAME=sherlock
 PATH_TO_JAR=/home/[username]/traefik-docker-ark/sherlock/sherlock.jar
+PATH_TO_CONFIG=/home/[username]/traefik-docker-ark/sherlock/resources/sherlock.toml
 PID_PATH_NAME=/tmp/sherlock-pid
 
 start() {
@@ -67,7 +72,7 @@ start() {
         # nohup : keeps the process to remain running after the session is closed.
         # & : runs the command in the background.
         # $! : contains the process ID of the most recently executed background pipeline.
-        nohup java -jar "$PATH_TO_JAR" /tmp 2> /dev/null & echo "$!" > "$PID_PATH_NAME"
+        nohup java -jar "$PATH_TO_JAR" "$PATH_TO_CONFIG" /tmp 2> /dev/null & echo "$!" > "$PID_PATH_NAME"
         echo "$SERVICE_NAME started ..."
     else
         echo "$SERVICE_NAME is already running ..."
@@ -100,7 +105,10 @@ case "$1" in
 esac
 ```
 
-**Note :** use the correct `sherlock.jar` path in the `PATH_TO_JAR` above variable.
+**Note :**
+
+- Use the correct `sherlock.jar` path in the `PATH_TO_JAR` above variable.
+- Use the correct `sherlock.toml` path in the `PATH_TO_CONFIG` above variable.
 
 Make the script executable :
 
@@ -130,7 +138,27 @@ ExecReload=/usr/local/bin/sherlock-service.sh restart
 WantedBy=multi-user.target
 ```
 
-Activate the service :
+### Configuration file (sherlock.toml)
+
+The bot has some parameters to setup.
+
+Your discord profile ID :
+
+```yml
+[owner]
+id = "your_discord_id"
+```
+
+The location of the `sherlock.sh` script (by default: `traefik/containers/ark-server/sherlock.sh`) :
+
+```yml
+[directory]
+sherlock_script = "path/to/script"
+```
+
+**Note :** the bot token value will be set [below](#token).
+
+### Service activation
 
 ```sh
 sudo systemctl daemon-reload
@@ -188,8 +216,8 @@ In order to use the bot, you need to create a token through the [Discord Develop
 This token must be placed in the `sherlock/resources/sherlock.toml` configuration file :
 
 ```s
-[token]
-discord = "your_bot_token"
+[bot]
+token = "your_bot_token"
 ```
 
 Restart the bot :
@@ -204,4 +232,4 @@ In the [Discord Developer Portal](https://discord.com/developers/applications), 
 
 ### Commands
 
-By using the command `?help`, the bot will send a private message containing all the commands.
+By using the `?help` command, the bot sends a private message containing all the commands.
