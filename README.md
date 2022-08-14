@@ -172,3 +172,36 @@ alias arkstop='docker exec ark-server arkmanager stop'
 ```
 
 Put these in your ~/.bashrc file.
+
+Reload `.bashrc` settings without logging out and back in again :
+
+```sh
+source ~/.bashrc
+```
+
+## Discord
+
+### Token
+
+In order to use the bot, you need to create a token through the [Discord Developer Portal](https://discord.com/developers/applications).
+
+This token must be placed in the `sherlock/resources/sherlock.toml` configuration file :
+
+```s
+[token]
+discord = "your_bot_token"
+```
+
+Restart the bot :
+
+```sh
+sudo systemctl restart sherlock
+```
+
+### Add the bot in a discord server
+
+In the [Discord Developer Portal](https://discord.com/developers/applications), go to `OAuth2` -> `URL Generator` and check the `bot` box. Then, check the desired permissions and an URL must appear.
+
+### Commands
+
+By using the command `?help`, the bot will send a private message containing all the commands.
