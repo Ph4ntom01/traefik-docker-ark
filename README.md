@@ -156,7 +156,9 @@ The location of the `sherlock.sh` script (by default: `traefik/containers/ark-se
 sherlock_script = "path/to/script"
 ```
 
-**Note :** the bot token value will be set [below](#token).
+**Use an absolute path.**
+
+**Note :** the bot token value is set [below](#token).
 
 ### Service activation
 
