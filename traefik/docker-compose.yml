@@ -1,0 +1,49 @@
+version: "3.3"
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--configFile=${TRAEFIK_CONT_ROOT_PATH}/static/traefik.yml"
+    ports:
+      - "7777:7777/udp"
+      - "27015:27015/udp"
+    volumes:
+      # Listening to the docker socket.
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # Logs
+      - "${TRAEFIK_ROOT_PATH}/log:/log"
+      # Static configuration.
+      - "${TRAEFIK_ROOT_PATH}${TRAEFIK_CONF_PATH}/static:${TRAEFIK_CONT_ROOT_PATH}/static"
+      # Dynamic configuration.
+      - "${TRAEFIK_ROOT_PATH}${TRAEFIK_CONF_PATH}/dynamic:${TRAEFIK_CONT_ROOT_PATH}/dynamic"
+    restart: always
+    networks:
+      proxy:
+        ipv4_address: 192.168.26.14
+
+  ark-server:
+    image: jacobpeddk/ark-server-tools:latest
+    container_name: ark-server
+    volumes:
+      - "ark:/ark"
+    restart: "no"
+    networks:
+      proxy:
+        ipv4_address: 192.168.26.7
+
+volumes:
+  ark:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "${TRAEFIK_ROOT_PATH}${TRAEFIK_CONT_PATH}/ark-server/data"
+
+networks:
+  proxy:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.26.0/28

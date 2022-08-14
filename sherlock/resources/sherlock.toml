@@ -1,0 +1,6 @@
+[markdown]
+yaml = "yaml"
+c = "c"
+
+[token]
+discord = "your_bot_token"

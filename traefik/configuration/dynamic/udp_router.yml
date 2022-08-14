@@ -1,0 +1,28 @@
+################################################################
+# UDP configuration
+################################################################
+
+udp:
+  # Routers ######################################################
+
+  routers:
+    ark-server:
+      entryPoints: ark-server
+      service: ark-server
+
+    steam-list:
+      entryPoints: steam-list
+      service: steam-list
+
+  # Services #####################################################
+
+  services:
+    ark-server:
+      loadBalancer:
+        servers:
+          - address: "192.168.26.7:7777"
+
+    steam-list:
+      loadBalancer:
+        servers:
+          - address: "192.168.26.7:27015"

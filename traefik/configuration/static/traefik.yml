@@ -1,0 +1,128 @@
+################################################################
+#
+# Configuration for Traefik v2.
+#
+# For Traefik v1: https://github.com/traefik/traefik/blob/v1.7/traefik.sample.toml
+#
+################################################################
+
+################################################################
+# Global configuration
+################################################################
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+################################################################
+# EntryPoints configuration
+################################################################
+
+# EntryPoints definition
+#
+# Optional
+#
+entryPoints:
+  ark-server:
+    address: :7777/udp
+
+  steam-list:
+    address: :27015/udp
+
+################################################################
+# Traefik logs configuration
+################################################################
+
+# Traefik logs
+# Enabled by default and log to stdout
+#
+# Optional
+#
+log:
+  # Log level
+  #
+  # Optional
+  # Default: "ERROR"
+  #
+  level: ERROR
+
+  # Sets the filepath for the traefik log. If not specified, stdout will be used.
+  # Intermediate directories are created if necessary.
+  #
+  # Optional
+  # Default: os.Stdout
+  #
+  filePath: /log/traefik.log
+
+  # Format is either "json" or "common".
+  #
+  # Optional
+  # Default: "common"
+  #
+#  format: json
+
+################################################################
+# API and dashboard configuration
+################################################################
+
+# Enable API and dashboard
+#
+# Optional
+#
+api:
+  # Enable the API in insecure mode
+  #
+  # Optional
+  # Default: false
+  #
+  #  insecure: true
+
+  # Enabled Dashboard
+  #
+  # Optional
+  # Default: true
+  #
+  dashboard: true
+
+################################################################
+# Docker configuration backend
+################################################################
+
+providers:
+  # Enable Docker configuration backend
+  docker:
+    # Docker server endpoint. Can be a tcp or a unix socket endpoint.
+    #
+    # Required
+    # Default: "unix:///var/run/docker.sock"
+    #
+    endpoint: "unix:///var/run/docker.sock"
+
+    # Default host rule.
+    #
+    # Optional
+    # Default: "Host(`{{ normalize .Name }}`)"
+    #
+    #    defaultRule: Host(`{{ normalize .Name }}.docker.localhost`)
+
+    # Expose containers by default in traefik
+    #
+    # Optional
+    # Default: true
+    #
+    exposedByDefault: false
+
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+################################################################
+# HTTPS & TLS configuration
+################################################################
+
+#certificatesResolvers:
+
+################################################################
+# Experimental
+################################################################
+
+#experimental:
